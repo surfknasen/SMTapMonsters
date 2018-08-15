@@ -20,6 +20,8 @@ public class PlayerAttack : MonoBehaviour {
 
 	private MonsterStats myStats;
 	private LevelSystem level;
+	private float yPos;
+	public Vector3 myOriginalPos;
 
 	void Start () 
 	{
@@ -31,6 +33,7 @@ public class PlayerAttack : MonoBehaviour {
 		level = GetComponent<LevelSystem>();
 
 		canAttack = autoAttack = true;
+		myOriginalPos = myMonster.transform.position;
 
 		StartCoroutine(AutoAttack());
 	}
@@ -55,12 +58,12 @@ public class PlayerAttack : MonoBehaviour {
 	{
 		otherMonster = monster.transform;
 		otherMonsterOriginalPos = otherMonster.position;
+		yPos = otherMonsterOriginalPos.y - myOriginalPos.y;
 	}
 
 	void Update () 
 	{
 		timeSinceLastHit += Time.deltaTime;
-		print(canAttack);
 		if(Input.GetMouseButtonDown(0) && canAttack && !EventSystem.current.IsPointerOverGameObject()) // IF THE PLAYER DOES NOT CLICK, ATTACK AUTOMATICALLY
 		{
 			timeSinceLastHit = 0;
@@ -69,11 +72,13 @@ public class PlayerAttack : MonoBehaviour {
 
 		if(hitShakeDuration > 0) // if it's hit
 		{
-			otherMonster.transform.position = Vector3.Lerp(otherMonster.position, otherMonsterOriginalPos + Random.insideUnitSphere * hitShakeAmount, Time.deltaTime * hitShakeSpeed);
+			if(!BossFightHandler.bossFightActive) otherMonster.transform.position = Vector3.Lerp(otherMonster.position, otherMonsterOriginalPos + Random.insideUnitSphere * hitShakeAmount, Time.deltaTime * hitShakeSpeed);
+			else otherMonster.transform.position = Vector3.Lerp(otherMonster.position, new Vector3(otherMonsterOriginalPos.x, yPos, otherMonsterOriginalPos.y) + Random.insideUnitSphere * hitShakeAmount, Time.deltaTime * hitShakeSpeed);
 			hitShakeDuration -= Time.deltaTime;
 		} else
 		{
-			otherMonster.transform.position = Vector3.Lerp(otherMonster.position, otherMonsterOriginalPos, Time.deltaTime * hitShakeSpeed);
+			if(BossFightHandler.bossFightActive) otherMonster.transform.position = Vector3.Lerp(otherMonster.position, new Vector3(otherMonsterOriginalPos.x, yPos, otherMonsterOriginalPos.y), Time.deltaTime * hitShakeSpeed);
+			else otherMonster.transform.position = Vector3.Lerp(otherMonster.position, otherMonsterOriginalPos, Time.deltaTime * hitShakeSpeed);
 		}
 	}
 

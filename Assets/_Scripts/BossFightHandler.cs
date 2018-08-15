@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BossFightHandler : MonoBehaviour {
 
+	public static bool bossFightActive;
 	public MenuHandler menuHandler;
 	public Animation sceneSwitch;
 	public GameObject[] bossCards;
@@ -53,6 +54,20 @@ public class BossFightHandler : MonoBehaviour {
 		sceneSwitch.Play();
  		yield return new WaitForSeconds(1); // delay while the animation is taking place. the animation is 2 seconds. this is half of that time
 		playerAttack.canAttack = true; 
+		bossFightActive = true;
+
+		// ** FIX UP THE MENU (REMOVE THE BOTTOM MENU) ** //
+		foreach(GameObject g in fightUIElementsToShow)
+		{
+			g.SetActive(true);
+		}
+		foreach(GameObject g in fightUIElementsToHide)
+		{
+			g.SetActive(false);
+		}
+
+	
+		// ** SPAWN BOSS ** //
 
 		// hide training dummy
 		trainingDummy.SetActive(false);		
@@ -69,18 +84,12 @@ public class BossFightHandler : MonoBehaviour {
 				break;
 			}
 		}
-		// update the player attack to the new boss
-		// show the fight ui elements
-		foreach(GameObject g in fightUIElementsToShow)
-		{
-			g.SetActive(true);
-		}
-		foreach(GameObject g in fightUIElementsToHide)
-		{
-			g.SetActive(false);
-		}
-		
+
+		// ** CENTER MY MONSTER ** //
+		Transform monster = GameObject.FindGameObjectWithTag("MyMonster").transform.parent;
+		monster.position = Vector3.zero;
 	}
+	
 
 	public void EndFight(bool won)
 	{
@@ -91,6 +100,7 @@ public class BossFightHandler : MonoBehaviour {
 	{
 		playerAttack.canAttack = false; // turn this off for now so that it doesn't attack during the win/lose animation screen
 		GetComponent<BossAttack>().canAttack = false;
+		
 		if(won)
 		{
 			// give exp and stuff
@@ -99,7 +109,7 @@ public class BossFightHandler : MonoBehaviour {
 
 		sceneSwitch.Play();
 		yield return new WaitForSeconds(1); // delay to let that stuff finish
-		
+		bossFightActive = false;
 
 		// some animation sutff, win/lose screen
 		
@@ -116,16 +126,19 @@ public class BossFightHandler : MonoBehaviour {
 		}
 		Destroy(currentBoss); // remove the boss
 		GetComponent<PlayerAttack>().SetOtherMonsterVariables(trainingDummy.transform.parent.gameObject); // update the player to the new monster
-		
 
 		trainingDummy.SetActive(true); // put back the training dummy
 		menuHandler.menu0.SetActive(true); // show the card selector menu
 		menuHandler.menu1.SetActive(false);
 
+		GameObject otherMonster = GameObject.FindGameObjectWithTag("MyMonster"); // reset the player monster position
+		Vector3 ogPos = playerAttack.myOriginalPos;
+		otherMonster.transform.parent.position = new Vector3(0, ogPos.y, 0);
+
 		yield return new WaitForSeconds(1); // since the scene switch animation is 2 sec, we finish that here before letting the player attack again
 		GetComponent<BossAttack>().canAttack = true;
 		playerAttack.canAttack = true;
 		playerAttack.autoAttack = true;
-
+		
 	}
 }

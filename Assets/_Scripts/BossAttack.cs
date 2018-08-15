@@ -7,12 +7,12 @@ public class BossAttack : MonoBehaviour {
 	public float hitShakeAmount, hitShakeSpeed;
 	public bool canAttack = true;
 
-	bool bossFightActive;
 	BossFightHandler bossFightHandler;
 	Animation bossAnim;
 	float hitShakeDuration;
 	Transform otherMonster;
 	Vector3 otherMonsterOriginalPos;
+	Vector3 myOriginalPos;
 	MonsterStats stats;
 
 	void Start () 
@@ -26,16 +26,17 @@ public class BossAttack : MonoBehaviour {
 	{
 		if(hitShakeDuration > 0) // if it's hit
 		{
-			if(otherMonster != null) otherMonster.transform.parent.position = Vector3.Lerp(otherMonster.parent.position, otherMonsterOriginalPos + Random.insideUnitSphere * hitShakeAmount, Time.deltaTime * hitShakeSpeed);
+			if (otherMonster != null && BossFightHandler.bossFightActive) otherMonster.transform.parent.position = Vector3.Lerp(otherMonster.parent.position, new Vector3(otherMonsterOriginalPos.x, 0, otherMonsterOriginalPos.z) + Random.insideUnitSphere * hitShakeAmount, Time.deltaTime * hitShakeSpeed);
 			hitShakeDuration -= Time.deltaTime;
 		} else
 		{
-			if(otherMonster != null) otherMonster.transform.parent.position = Vector3.Lerp(otherMonster.parent.position, otherMonsterOriginalPos, Time.deltaTime * hitShakeSpeed);
+			if (otherMonster != null && BossFightHandler.bossFightActive) otherMonster.transform.parent.position = Vector3.Lerp(otherMonster.parent.position, new Vector3(otherMonsterOriginalPos.x, 0, otherMonsterOriginalPos.z), Time.deltaTime * hitShakeSpeed);
 		}
 	}
 	
 	public void StartBossFight(GameObject boss, GameObject myMonster)
 	{
+		myOriginalPos = boss.transform.position;
 		bossAnim = boss.transform.GetChild(0).GetComponent<Animation>();
 		otherMonster = myMonster.transform;
 		otherMonsterOriginalPos = myMonster.transform.parent.position;
