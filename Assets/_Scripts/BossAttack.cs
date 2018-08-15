@@ -46,7 +46,7 @@ public class BossAttack : MonoBehaviour {
 
 	IEnumerator Attack(GameObject boss)
 	{
-		yield return new WaitForSeconds(2); // animation delay
+		yield return new WaitForSeconds(3); // animation delay
 		while(true && canAttack)
 		{
 			if(bossAnim == null) yield break;

@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.ImageEffects;
 
 public class BossFightHandler : MonoBehaviour {
 
 	public static bool bossFightActive;
 	public MenuHandler menuHandler;
+	public GameObject fightText;
 	public Animation sceneSwitch;
 	public GameObject[] bossCards;
 	public GameObject[] bossPrefabs;
@@ -17,12 +19,14 @@ public class BossFightHandler : MonoBehaviour {
 	private GameObject currentBoss;
 	private PlayerAttack playerAttack;
 	private Health playerHealth;
+	private Fisheye fishEye;
 
 	void Start () 
 	{
 		trainingDummy = GameObject.FindGameObjectWithTag("OtherMonster");
 		playerHealth = GameObject.FindGameObjectWithTag("MyMonster").GetComponent<Health>();
 		playerAttack = GetComponent<PlayerAttack>();
+		fishEye = Camera.main.gameObject.GetComponent<Fisheye>();
 		foreach(GameObject g in fightUIElementsToShow)
 		{
 			g.SetActive(false);
@@ -53,8 +57,10 @@ public class BossFightHandler : MonoBehaviour {
 
 		sceneSwitch.Play();
  		yield return new WaitForSeconds(1); // delay while the animation is taking place. the animation is 2 seconds. this is half of that time
+
+
 		playerAttack.canAttack = true; 
-		bossFightActive = true;
+		
 
 		// ** FIX UP THE MENU (REMOVE THE BOTTOM MENU) ** //
 		foreach(GameObject g in fightUIElementsToShow)
@@ -66,7 +72,6 @@ public class BossFightHandler : MonoBehaviour {
 			g.SetActive(false);
 		}
 
-	
 		// ** SPAWN BOSS ** //
 
 		// hide training dummy
@@ -84,10 +89,17 @@ public class BossFightHandler : MonoBehaviour {
 				break;
 			}
 		}
+		bossFightActive = true;
 
 		// ** CENTER MY MONSTER ** //
 		Transform monster = GameObject.FindGameObjectWithTag("MyMonster").transform.parent;
 		monster.position = Vector3.zero;
+		
+		yield return new WaitForSeconds(1);
+		// ** PLAY "FIGHT" ANIMATION SEQUENCE ** //
+		fightText.SetActive(true);
+		fightText.GetComponent<Animation>().Play();
+		
 	}
 	
 
