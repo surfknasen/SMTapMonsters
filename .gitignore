@@ -4,7 +4,7 @@
 [Bb]uild/
 [Bb]uilds/
 Assets/AssetStoreTools*
-Assets/DownloadedAssets/
+Assets/_SpritesImages/
 
 # Visual Studio cache directory
 /.vs/
