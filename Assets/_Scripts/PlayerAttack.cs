@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 public class PlayerAttack : MonoBehaviour {
 
+	public bool canAttack, autoAttack;
+
 	public float hitShakeAmount;
 	public float hitShakeSpeed;
 
@@ -19,8 +21,6 @@ public class PlayerAttack : MonoBehaviour {
 	private MonsterStats myStats;
 	private LevelSystem level;
 
-	bool canAttack = true;
-
 	void Start () 
 	{
 		SetMyMonsterVariables(null);
@@ -29,6 +29,8 @@ public class PlayerAttack : MonoBehaviour {
 		otherMonsterOriginalPos = otherMonster.position;
 
 		level = GetComponent<LevelSystem>();
+
+		canAttack = autoAttack = true;
 
 		StartCoroutine(AutoAttack());
 	}
@@ -54,15 +56,16 @@ public class PlayerAttack : MonoBehaviour {
 		otherMonster = monster.transform;
 		otherMonsterOriginalPos = otherMonster.position;
 	}
-	
+
 	void Update () 
 	{
 		timeSinceLastHit += Time.deltaTime;
+		print(canAttack);
 		if(Input.GetMouseButtonDown(0) && canAttack && !EventSystem.current.IsPointerOverGameObject()) // IF THE PLAYER DOES NOT CLICK, ATTACK AUTOMATICALLY
 		{
 			timeSinceLastHit = 0;
 			StartCoroutine(Attack());
-		}
+		} 
 
 		if(hitShakeDuration > 0) // if it's hit
 		{
@@ -78,7 +81,7 @@ public class PlayerAttack : MonoBehaviour {
 	{
 		while(true)
 		{
-			if(timeSinceLastHit > 1)
+			if(timeSinceLastHit > 1 && autoAttack)
 			{
 				// attack
 				StartCoroutine(Attack());

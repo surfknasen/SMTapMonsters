@@ -5,6 +5,7 @@ using UnityEngine;
 public class BossFightHandler : MonoBehaviour {
 
 	public MenuHandler menuHandler;
+	public Animation sceneSwitch;
 	public GameObject[] bossCards;
 	public GameObject[] bossPrefabs;
 	public List<GameObject> fightUIElementsToShow; // health sliders, texts etc
@@ -13,10 +14,14 @@ public class BossFightHandler : MonoBehaviour {
 
 	private GameObject trainingDummy;
 	private GameObject currentBoss;
+	private PlayerAttack playerAttack;
+	private Health playerHealth;
 
 	void Start () 
 	{
 		trainingDummy = GameObject.FindGameObjectWithTag("OtherMonster");
+		playerHealth = GameObject.FindGameObjectWithTag("MyMonster").GetComponent<Health>();
+		playerAttack = GetComponent<PlayerAttack>();
 		foreach(GameObject g in fightUIElementsToShow)
 		{
 			g.SetActive(false);
@@ -37,8 +42,21 @@ public class BossFightHandler : MonoBehaviour {
 
 	public void StartFight()
 	{
+		StartCoroutine(StartFightCoroutine());
+	}
+
+	IEnumerator StartFightCoroutine()
+	{
+		playerAttack.canAttack = false; 
+		playerAttack.autoAttack = false;
+
+		sceneSwitch.Play();
+ 		yield return new WaitForSeconds(1); // delay while the animation is taking place. the animation is 2 seconds. this is half of that time
+		playerAttack.canAttack = true; 
+
 		// hide training dummy
 		trainingDummy.SetActive(false);		
+		//find player
 		// spawn the boss
 		for(int i = 0; i < bossCards.Length; i++)
 		{
@@ -61,14 +79,32 @@ public class BossFightHandler : MonoBehaviour {
 		{
 			g.SetActive(false);
 		}
+		
 	}
 
 	public void EndFight(bool won)
 	{
+		StartCoroutine(EndFightCoroutine(won));
+	}
+
+	IEnumerator EndFightCoroutine(bool won)
+	{
+		playerAttack.canAttack = false; // turn this off for now so that it doesn't attack during the win/lose animation screen
+		GetComponent<BossAttack>().canAttack = false;
 		if(won)
 		{
 			// give exp and stuff
+			print("won");
 		} 
+
+		sceneSwitch.Play();
+		yield return new WaitForSeconds(1); // delay to let that stuff finish
+		
+
+		// some animation sutff, win/lose screen
+		
+		playerHealth.ResetScript(); // reset the health script
+		
 		// return to the training grounds
 		foreach(GameObject g in fightUIElementsToShow) // hide the health and stuff
 		{
@@ -80,8 +116,16 @@ public class BossFightHandler : MonoBehaviour {
 		}
 		Destroy(currentBoss); // remove the boss
 		GetComponent<PlayerAttack>().SetOtherMonsterVariables(trainingDummy.transform.parent.gameObject); // update the player to the new monster
+		
+
 		trainingDummy.SetActive(true); // put back the training dummy
 		menuHandler.menu0.SetActive(true); // show the card selector menu
 		menuHandler.menu1.SetActive(false);
+
+		yield return new WaitForSeconds(1); // since the scene switch animation is 2 sec, we finish that here before letting the player attack again
+		GetComponent<BossAttack>().canAttack = true;
+		playerAttack.canAttack = true;
+		playerAttack.autoAttack = true;
+
 	}
 }

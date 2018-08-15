@@ -14,6 +14,7 @@ public class Health : MonoBehaviour {
 	private bool isTrainingGolem;
 	private float currentHealth;
 	private GameObject gameManager;
+	private bool endedFight;
 
 	void Start () 
 	{
@@ -27,9 +28,10 @@ public class Health : MonoBehaviour {
 	void Update()
 	{
 		if(healthSlider != null) LerpHealthSlider();
-		if(currentHealth <= 0 && !isTrainingGolem)
+		if(currentHealth <= 0 && !isTrainingGolem && !endedFight)
 		{
-			// ded
+			endedFight = true;
+			if(healthText != null) healthText.text = "HP: " + 0;
 			if(GameObject.FindGameObjectWithTag("MyMonster") != gameObject)
 			{
 				gameManager.GetComponent<BossFightHandler>().EndFight(true);
@@ -38,6 +40,12 @@ public class Health : MonoBehaviour {
 				gameManager.GetComponent<BossFightHandler>().EndFight(false);
 			}
 		}
+	}
+
+	public void ResetScript()
+	{
+		currentHealth = maxHealth;
+		if(healthText != null) healthText.text = "HP: " + currentHealth;
 	}
 
 	void LerpHealthSlider()

@@ -5,6 +5,7 @@ using UnityEngine;
 public class BossAttack : MonoBehaviour {
 
 	public float hitShakeAmount, hitShakeSpeed;
+	public bool canAttack = true;
 
 	bool bossFightActive;
 	BossFightHandler bossFightHandler;
@@ -25,11 +26,11 @@ public class BossAttack : MonoBehaviour {
 	{
 		if(hitShakeDuration > 0) // if it's hit
 		{
-			otherMonster.transform.parent.position = Vector3.Lerp(otherMonster.parent.position, otherMonsterOriginalPos + Random.insideUnitSphere * hitShakeAmount, Time.deltaTime * hitShakeSpeed);
+			if(otherMonster != null) otherMonster.transform.parent.position = Vector3.Lerp(otherMonster.parent.position, otherMonsterOriginalPos + Random.insideUnitSphere * hitShakeAmount, Time.deltaTime * hitShakeSpeed);
 			hitShakeDuration -= Time.deltaTime;
 		} else
 		{
-			otherMonster.transform.parent.position = Vector3.Lerp(otherMonster.parent.position, otherMonsterOriginalPos, Time.deltaTime * hitShakeSpeed);
+			if(otherMonster != null) otherMonster.transform.parent.position = Vector3.Lerp(otherMonster.parent.position, otherMonsterOriginalPos, Time.deltaTime * hitShakeSpeed);
 		}
 	}
 	
@@ -44,7 +45,8 @@ public class BossAttack : MonoBehaviour {
 
 	IEnumerator Attack(GameObject boss)
 	{
-		while(true)
+		yield return new WaitForSeconds(2); // animation delay
+		while(true && canAttack)
 		{
 			if(bossAnim == null) yield break;
 			//yield return new WaitForSeconds(bossAnim.clip.length * 0.2f);

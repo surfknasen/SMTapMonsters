@@ -445,8 +445,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ef658b6cd82b4e40bd350e4f2578285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  atkMin: 8
-  atkMax: 16
+  atkMin: 6
+  atkMax: 10
   hp: 200
 --- !u!114 &114855512592140228
 MonoBehaviour:
