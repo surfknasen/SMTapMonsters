@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.ImageEffects;
+using UnityEngine.UI;
 
 public class BossFightHandler : MonoBehaviour {
 
 	public static bool bossFightActive;
 	public MenuHandler menuHandler;
-	public GameObject fightText;
+	public GameObject fightText, winExpText, skullIcon;
 	public Animation sceneSwitch;
 	public GameObject[] bossCards;
 	public GameObject[] bossPrefabs;
+	public int[] bossExp;
 	public List<GameObject> fightUIElementsToShow; // health sliders, texts etc
 	public List<GameObject> fightUIElementsToHide;
 	public ScrollRectSnap scrollRectSnap;
@@ -20,6 +22,7 @@ public class BossFightHandler : MonoBehaviour {
 	private PlayerAttack playerAttack;
 	private Health playerHealth;
 	private Fisheye fishEye;
+	private int bossIndex;
 
 	void Start () 
 	{
@@ -52,6 +55,7 @@ public class BossFightHandler : MonoBehaviour {
 
 	IEnumerator StartFightCoroutine()
 	{
+		playerAttack.StopAllCoroutines();
 		playerAttack.canAttack = false; 
 		playerAttack.autoAttack = false;
 
@@ -86,6 +90,7 @@ public class BossFightHandler : MonoBehaviour {
 				currentBoss = boss;
 				GetComponent<PlayerAttack>().SetOtherMonsterVariables(boss);
 				GetComponent<BossAttack>().StartBossFight(boss, GameObject.FindGameObjectWithTag("MyMonster"));
+				bossIndex = i;
 				break;
 			}
 		}
@@ -99,7 +104,6 @@ public class BossFightHandler : MonoBehaviour {
 		// ** PLAY "FIGHT" ANIMATION SEQUENCE ** //
 		fightText.SetActive(true);
 		fightText.GetComponent<Animation>().Play();
-		
 	}
 	
 
@@ -110,17 +114,29 @@ public class BossFightHandler : MonoBehaviour {
 
 	IEnumerator EndFightCoroutine(bool won)
 	{
-		playerAttack.canAttack = false; // turn this off for now so that it doesn't attack during the win/lose animation screen
+		playerAttack.StopAllCoroutines();
+		playerAttack.canAttack = false; 
 		GetComponent<BossAttack>().canAttack = false;
 		
 		if(won)
 		{
+			LevelSystem levelSystem = GetComponent<LevelSystem>();
+			levelSystem.AddExp(bossExp[bossIndex]);
+			winExpText.SetActive(true);
+			winExpText.GetComponent<Text>().text = "+" + bossExp[bossIndex] + " EXP";
+			winExpText.GetComponent<Animation>().Play();
+			yield return new WaitForSeconds(3);
 			// give exp and stuff
-			print("won");
 		} 
+		else
+		{
+			skullIcon.SetActive(true);
+			yield return new WaitForSeconds(2f);
+		}
 
 		sceneSwitch.Play();
 		yield return new WaitForSeconds(1); // delay to let that stuff finish
+		skullIcon.SetActive(false);
 		bossFightActive = false;
 
 		// some animation sutff, win/lose screen

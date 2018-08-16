@@ -29,22 +29,24 @@ public class LevelSystem : MonoBehaviour {
 	public void AddExp(int amount)
 	{
 		currentExp += amount;
-		expText.text = "LVL " + currentLevel + "  -  " + currentExp + "/" + nextLevelExp;
+		expText.text = "LVL " + currentLevel + "  -  " + currentExp + " / " + nextLevelExp;
 		if(currentExp >= nextLevelExp)
 		{
-			LevelUp();
+			LevelUp(currentExp-nextLevelExp);
 		}
 	}
 
 
-	void LevelUp()
+	void LevelUp(float spareExp)
 	{
 		currentLevel++;
 		nextLevelExp = 20 * (int)Mathf.Pow(2, currentLevel - 1);
 		currentExp = 0;
-		UpdateSlider(0);
+		AddExp((int)spareExp);
 		selector.CheckIfNewCardUnlocked();
-		expText.text = "LVL " + currentLevel + "  -  " + "0/" + nextLevelExp;
+		if(spareExp > 0) return;
+		UpdateSlider(0);
+		expText.text = "LVL " + currentLevel + "  -  " + "0 / " + nextLevelExp;
 	}
 
 	void UpdateSlider(float newValue)

@@ -32,6 +32,8 @@ public class Health : MonoBehaviour {
 		{
 			endedFight = true;
 			if(healthText != null) healthText.text = "HP: " + 0;
+			gameManager.GetComponent<PlayerAttack>().canAttack = false;
+			gameManager.GetComponent<PlayerAttack>().StopAllCoroutines();
 			if(GameObject.FindGameObjectWithTag("MyMonster") != gameObject)
 			{
 				gameManager.GetComponent<BossFightHandler>().EndFight(true);
