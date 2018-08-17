@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class PlayerAttack : MonoBehaviour {
 
 	public bool canAttack, autoAttack;
+	public GameObject ultimateAttackButton;
+	public Text ultimateAttackText;
 
 	public float hitShakeAmount;
 	public float hitShakeSpeed;
+	public Vector3 myOriginalPos;
 
 	private GameObject myMonster;
 	private Animation myMonsterAnim;
@@ -21,7 +25,8 @@ public class PlayerAttack : MonoBehaviour {
 	private MonsterStats myStats;
 	private LevelSystem level;
 	private float yPos;
-	public Vector3 myOriginalPos;
+	private int hitsSinceLastUltimate;
+	private float mouseDownTime;
 
 	void Start () 
 	{
@@ -68,7 +73,22 @@ public class PlayerAttack : MonoBehaviour {
 		{
 			timeSinceLastHit = 0;
 			StartCoroutine(Attack());
-		} 
+		}
+
+		if(Input.GetMouseButton(0) && BossFightHandler.bossFightActive)
+		{
+			mouseDownTime += Time.deltaTime;
+			if(mouseDownTime > 2 && hitsSinceLastUltimate > 20 && canAttack)
+			{
+				hitsSinceLastUltimate = 0;
+				mouseDownTime = 0;
+				ShowUltimateAttackText();
+				UltimateAttack();
+			}
+		} else if(hitsSinceLastUltimate > 20)
+		{
+			ShowUltimateAttackText();
+		}
 
 		if(hitShakeDuration > 0) // if it's hit
 		{
@@ -104,7 +124,7 @@ public class PlayerAttack : MonoBehaviour {
 		
 		myMonsterAnim.Stop();
 		myMonsterAnim.Play();
-
+		if(BossFightHandler.bossFightActive) hitsSinceLastUltimate++;
 		hitShakeDuration = .1f;
 		otherMonster.transform.GetChild(0).GetComponent<Health>().TakeDamage(Random.Range(myStats.atkMin, myStats.atkMax + 1));
 
@@ -116,6 +136,37 @@ public class PlayerAttack : MonoBehaviour {
 	{
 		canAttack = false;
 		yield return new WaitForSeconds(myMonsterAnim.clip.length * 0.75f);
+		hitShakeAmount = 0.3f;
 		canAttack = true;
 	}
+
+	void ShowUltimateAttackText()
+	{
+		if(ultimateAttackText.gameObject.activeInHierarchy) return;
+		ultimateAttackText.gameObject.SetActive(true);
+		ultimateAttackText.gameObject.GetComponent<Animation>().Play();
+	}
+
+	public void UltimateAttack()
+	{
+		hitShakeAmount = 2;
+		StartCoroutine(Attack());
+		hitsSinceLastUltimate = 0;
+		for(int i = 0; i < 10; i++)
+		{
+			otherMonster.transform.GetChild(0).GetComponent<Health>().TakeDamage(Random.Range(myStats.atkMin * 2, myStats.atkMax * 2)); // extra damage too
+		}
+		ultimateAttackText.gameObject.SetActive(false);
+	}
+
+	/*public IEnumerator UltimateAttackDelay()
+	{
+		while(true)
+		{
+			ultimateAttackAlreadyPlayed = false;
+			yield return new WaitForSeconds(0.5f);
+			if(BossFightHandler.bossFightActive && hitsSinceLastUltimate >= 15) ShowUltimateAttackButton();
+		}
+	}
+	*/
 }

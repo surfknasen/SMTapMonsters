@@ -21,6 +21,7 @@ public class Health : MonoBehaviour {
 		gameManager = GameObject.FindGameObjectWithTag("GameManager");
 		maxHealth = GetComponent<MonsterStats>().hp;
 		currentHealth = maxHealth;
+		damageCanvas = GameObject.FindGameObjectWithTag("DamageCanvas").transform;
 		if(healthText != null) healthText.text = "HP: " + currentHealth;
 		if(maxHealth == -1) isTrainingGolem = true;
 	}

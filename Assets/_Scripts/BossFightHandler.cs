@@ -61,7 +61,7 @@ public class BossFightHandler : MonoBehaviour {
 		playerAttack.autoAttack = false;
 
 		sceneSwitch.Play();
- 		yield return new WaitForSeconds(1); // delay while the animation is taking place. the animation is 2 seconds. this is half of that time
+ 		yield return new WaitForSeconds(0.55f); // delay while the animation is taking place. the animation is 2 seconds. this is half of that time
 
 
 		playerAttack.canAttack = true; 
@@ -101,10 +101,12 @@ public class BossFightHandler : MonoBehaviour {
 		Transform monster = GameObject.FindGameObjectWithTag("MyMonster").transform.parent;
 		monster.position = Vector3.zero;
 		
-		yield return new WaitForSeconds(1);
+		yield return new WaitForSeconds(0.55f);
 		// ** PLAY "FIGHT" ANIMATION SEQUENCE ** //
 		fightText.SetActive(true);
 		fightText.GetComponent<Animation>().Play();
+
+	//	playerAttack.StartCoroutine(playerAttack.UltimateAttackDelay());
 	}
 	
 
@@ -116,6 +118,7 @@ public class BossFightHandler : MonoBehaviour {
 	IEnumerator EndFightCoroutine(bool won)
 	{
 		playerAttack.StopAllCoroutines();
+		playerAttack.ultimateAttackText.gameObject.SetActive(false);
 		playerAttack.canAttack = false; 
 		GetComponent<BossAttack>().canAttack = false;
 		
@@ -127,8 +130,9 @@ public class BossFightHandler : MonoBehaviour {
 			winExpText.GetComponent<Text>().text = "+" + bossExp[bossIndex] + " EXP";
 			winExpText.GetComponent<Animation>().Play();
 			GameObject particle = Instantiate(winParticle);
-			Destroy(particle, 3);
 			yield return new WaitForSeconds(3);
+			Destroy(particle);
+			winExpText.SetActive(false);
 			// give exp and stuff
 		} 
 		else
@@ -139,7 +143,7 @@ public class BossFightHandler : MonoBehaviour {
 		}
 
 		sceneSwitch.Play();
-		yield return new WaitForSeconds(1); // delay to let that stuff finish
+		yield return new WaitForSeconds(0.55f); // delay to let that stuff finish
 		skullIcon.SetActive(false);
 		
 		bossFightActive = false;
@@ -168,11 +172,10 @@ public class BossFightHandler : MonoBehaviour {
 		Vector3 ogPos = playerAttack.myOriginalPos;
 		otherMonster.transform.parent.position = new Vector3(0, ogPos.y, 0);
 
-		yield return new WaitForSeconds(1); // since the scene switch animation is 2 sec, we finish that here before letting the player attack again
+		yield return new WaitForSeconds(0.55f); // since the scene switch animation is 1.1 sec, we finish that here before letting the player attack again
 		GetComponent<BossAttack>().canAttack = true;
 		playerAttack.canAttack = true;
 		playerAttack.autoAttack = true;
 		playerAttack.StartCoroutine(playerAttack.AutoAttack());
-		
 	}
 }
