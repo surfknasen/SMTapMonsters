@@ -16,6 +16,7 @@ public class BossFightHandler : MonoBehaviour {
 	public List<GameObject> fightUIElementsToShow; // health sliders, texts etc
 	public List<GameObject> fightUIElementsToHide;
 	public ScrollRectSnap scrollRectSnap;
+	public GameObject winParticle;
 
 	private GameObject trainingDummy;
 	private GameObject currentBoss;
@@ -125,18 +126,22 @@ public class BossFightHandler : MonoBehaviour {
 			winExpText.SetActive(true);
 			winExpText.GetComponent<Text>().text = "+" + bossExp[bossIndex] + " EXP";
 			winExpText.GetComponent<Animation>().Play();
+			GameObject particle = Instantiate(winParticle);
+			Destroy(particle, 3);
 			yield return new WaitForSeconds(3);
 			// give exp and stuff
 		} 
 		else
 		{
 			skullIcon.SetActive(true);
+			skullIcon.transform.GetChild(0).GetComponent<Animation>().Play();
 			yield return new WaitForSeconds(2f);
 		}
 
 		sceneSwitch.Play();
 		yield return new WaitForSeconds(1); // delay to let that stuff finish
 		skullIcon.SetActive(false);
+		
 		bossFightActive = false;
 
 		// some animation sutff, win/lose screen
@@ -167,6 +172,7 @@ public class BossFightHandler : MonoBehaviour {
 		GetComponent<BossAttack>().canAttack = true;
 		playerAttack.canAttack = true;
 		playerAttack.autoAttack = true;
+		playerAttack.StartCoroutine(playerAttack.AutoAttack());
 		
 	}
 }

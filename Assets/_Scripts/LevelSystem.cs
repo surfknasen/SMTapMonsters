@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class LevelSystem : MonoBehaviour {
 
 	public Slider expSlider;
-	public Text expText;
+	public Text expText, lvlText;
 
 	[HideInInspector]
 	public int currentLevel = 1;
@@ -29,7 +29,8 @@ public class LevelSystem : MonoBehaviour {
 	public void AddExp(int amount)
 	{
 		currentExp += amount;
-		expText.text = "LVL " + currentLevel + "  -  " + currentExp + " / " + nextLevelExp;
+		lvlText.text = "LVL " + currentLevel;
+		expText.text = currentExp + " / " + nextLevelExp;
 		if(currentExp >= nextLevelExp)
 		{
 			LevelUp(currentExp-nextLevelExp);
@@ -44,9 +45,31 @@ public class LevelSystem : MonoBehaviour {
 		currentExp = 0;
 		AddExp((int)spareExp);
 		selector.CheckIfNewCardUnlocked();
+		StartCoroutine(LvlTextAnimation());
 		if(spareExp > 0) return;
 		UpdateSlider(0);
-		expText.text = "LVL " + currentLevel + "  -  " + "0 / " + nextLevelExp;
+		lvlText.text = "LVL " + currentLevel;
+		expText.text = "0 / " + nextLevelExp;
+	}
+
+	IEnumerator LvlTextAnimation()
+	{
+		float time = 0.25f;
+		float elapsedTime = 0;
+		while(elapsedTime < time)
+		{
+			lvlText.transform.localScale = Vector3.Lerp(lvlText.transform.localScale, new Vector3(1.2f, 1.2f, 1.2f), (elapsedTime / time));
+			elapsedTime += Time.deltaTime;
+			yield return new WaitForEndOfFrame();
+		}
+
+		elapsedTime = 0;
+		while(elapsedTime < time)
+		{
+			lvlText.transform.localScale = Vector3.Lerp(lvlText.transform.localScale, new Vector3(1, 1, 1), (elapsedTime / time));
+			elapsedTime += Time.deltaTime;
+			yield return new WaitForEndOfFrame();
+		}
 	}
 
 	void UpdateSlider(float newValue)

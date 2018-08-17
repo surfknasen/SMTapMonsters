@@ -82,7 +82,7 @@ public class PlayerAttack : MonoBehaviour {
 		}
 	}
 
-	IEnumerator AutoAttack()
+	public IEnumerator AutoAttack()
 	{
 		while(true)
 		{
