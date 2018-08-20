@@ -78,7 +78,7 @@ public class PlayerAttack : MonoBehaviour {
 		if(Input.GetMouseButton(0) && BossFightHandler.bossFightActive)
 		{
 			mouseDownTime += Time.deltaTime;
-			if(mouseDownTime > 2 && hitsSinceLastUltimate > 20 && canAttack)
+			if(mouseDownTime > 5 && hitsSinceLastUltimate > 20 && canAttack)
 			{
 				hitsSinceLastUltimate = 0;
 				mouseDownTime = 0;
@@ -126,7 +126,7 @@ public class PlayerAttack : MonoBehaviour {
 		myMonsterAnim.Play();
 		if(BossFightHandler.bossFightActive) hitsSinceLastUltimate++;
 		hitShakeDuration = .1f;
-		otherMonster.transform.GetChild(0).GetComponent<Health>().TakeDamage(Random.Range(myStats.atkMin, myStats.atkMax + 1));
+		otherMonster.transform.GetChild(0).GetComponent<Health>().TakeDamage(Random.Range(myStats.atkMin, myStats.atkMax + 1) * GetComponent<LevelSystem>().currentLevel / 4);
 
 		// for the future: add random misses. if the attack is successful
 		level.AddExp(Random.Range(myStats.atkMin, myStats.atkMax) * 5);
@@ -154,7 +154,7 @@ public class PlayerAttack : MonoBehaviour {
 		hitsSinceLastUltimate = 0;
 		for(int i = 0; i < 10; i++)
 		{
-			otherMonster.transform.GetChild(0).GetComponent<Health>().TakeDamage(Random.Range(myStats.atkMin * 2, myStats.atkMax * 2)); // extra damage too
+			otherMonster.transform.GetChild(0).GetComponent<Health>().TakeDamage(Random.Range(myStats.atkMin * 2, myStats.atkMax * 2) * GetComponent<LevelSystem>().currentLevel / 4); // extra damage too
 		}
 		ultimateAttackText.gameObject.SetActive(false);
 	}

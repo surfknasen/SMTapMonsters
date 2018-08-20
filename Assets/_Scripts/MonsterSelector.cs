@@ -29,7 +29,8 @@ public class MonsterSelector : MonoBehaviour {
 	{
 		for(int i = 0; i < cards.Length; i++)
 		{
-			unlockableLvl[i] = 1 + (i * 8 * i / 2); // what
+			//unlockableLvl[i] = 1 + (i * 8 * i / 2); // what
+			unlockableLvl[i] = i * 5;
 			cards[i].transform.GetChild(0).GetComponent<Text>().text = "LVL " + unlockableLvl[i];
 			if(levelSystem.currentLevel >= unlockableLvl[i])
 			{
@@ -43,11 +44,6 @@ public class MonsterSelector : MonoBehaviour {
 		}
 	}
 	
-	void Update () 
-	{
-		
-	}
-
 	public void CheckIfNewCardUnlocked()
 	{
 		// display message when a new card is unlocked

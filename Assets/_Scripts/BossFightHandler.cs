@@ -130,6 +130,9 @@ public class BossFightHandler : MonoBehaviour {
 			winExpText.GetComponent<Text>().text = "+" + bossExp[bossIndex] + " EXP";
 			winExpText.GetComponent<Animation>().Play();
 			GameObject particle = Instantiate(winParticle);
+			BossSelector bossSelector = GetComponent<BossSelector>();
+			bossSelector.bossesBeaten[bossIndex] = true;
+			bossSelector.CheckIfNewBossUnlocked();
 			yield return new WaitForSeconds(3);
 			Destroy(particle);
 			winExpText.SetActive(false);
@@ -150,7 +153,6 @@ public class BossFightHandler : MonoBehaviour {
 
 		// some animation sutff, win/lose screen
 		
-		playerHealth.ResetScript(); // reset the health script
 		
 		// return to the training grounds
 		foreach(GameObject g in fightUIElementsToShow) // hide the health and stuff
@@ -173,6 +175,7 @@ public class BossFightHandler : MonoBehaviour {
 		otherMonster.transform.parent.position = new Vector3(0, ogPos.y, 0);
 
 		yield return new WaitForSeconds(0.55f); // since the scene switch animation is 1.1 sec, we finish that here before letting the player attack again
+		playerHealth.ResetScript(); // reset the health script
 		GetComponent<BossAttack>().canAttack = true;
 		playerAttack.canAttack = true;
 		playerAttack.autoAttack = true;
