@@ -29,6 +29,7 @@ public class BossFightHandler : MonoBehaviour {
 	{
 		trainingDummy = GameObject.FindGameObjectWithTag("OtherMonster");
 		playerHealth = GameObject.FindGameObjectWithTag("MyMonster").GetComponent<Health>();
+		SetHealthCanvas(GameObject.FindGameObjectWithTag("MyMonster"));
 		playerAttack = GetComponent<PlayerAttack>();
 		fishEye = Camera.main.gameObject.GetComponent<Fisheye>();
 		foreach(GameObject g in fightUIElementsToShow)
@@ -179,6 +180,7 @@ public class BossFightHandler : MonoBehaviour {
 		GetComponent<BossAttack>().canAttack = true;
 		playerAttack.canAttack = true;
 		playerAttack.autoAttack = true;
+		playerAttack.ultimateAttackText.gameObject.SetActive(false);
 		playerAttack.StartCoroutine(playerAttack.AutoAttack());
 	}
 }

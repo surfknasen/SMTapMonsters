@@ -17,6 +17,7 @@ public class MonsterSelector : MonoBehaviour {
 
 	void Start () 
 	{
+		
 		levelSystem = GetComponent<LevelSystem>();
 		playerAttack = GetComponent<PlayerAttack>();
 		

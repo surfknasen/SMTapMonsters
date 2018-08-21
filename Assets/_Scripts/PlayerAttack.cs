@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class PlayerAttack : MonoBehaviour {
 
 	public bool canAttack, autoAttack;
-	public GameObject ultimateAttackButton;
 	public Text ultimateAttackText;
 
 	public float hitShakeAmount;
@@ -154,7 +153,7 @@ public class PlayerAttack : MonoBehaviour {
 		hitsSinceLastUltimate = 0;
 		for(int i = 0; i < 10; i++)
 		{
-			otherMonster.transform.GetChild(0).GetComponent<Health>().TakeDamage(Random.Range(myStats.atkMin * 2, myStats.atkMax * 2) * GetComponent<LevelSystem>().currentLevel / 4); // extra damage too
+			otherMonster.transform.GetChild(0).GetComponent<Health>().TakeDamage(Random.Range(myStats.atkMin, myStats.atkMax + 1) * GetComponent<LevelSystem>().currentLevel / 4); // extra damage too
 		}
 		ultimateAttackText.gameObject.SetActive(false);
 	}
