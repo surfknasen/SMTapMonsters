@@ -128,7 +128,7 @@ public class PlayerAttack : MonoBehaviour {
 		otherMonster.transform.GetChild(0).GetComponent<Health>().TakeDamage(Random.Range(myStats.atkMin, myStats.atkMax + 1) * GetComponent<LevelSystem>().currentLevel / 4);
 
 		// for the future: add random misses. if the attack is successful
-		level.AddExp(Random.Range(myStats.atkMin, myStats.atkMax) * 5);
+		level.AddExp(Random.Range(myStats.atkMin, myStats.atkMax) * level.currentLevel * 3);
 	}
 
 	IEnumerator AttackDelay()

@@ -40,9 +40,9 @@ public class LevelSystem : MonoBehaviour {
 
 	void LevelUp(float spareExp)
 	{
-		currentLevel++;
 		//nextLevelExp = 20 * (int)Mathf.Pow(2, currentLevel - 1);
-		nextLevelExp = currentLevel * 100;
+		nextLevelExp = 100 * currentLevel * (currentLevel + 1) / 2;
+		currentLevel++;
 		currentExp = 0;
 		AddExp((int)spareExp);
 		selector.CheckIfNewCardUnlocked();
