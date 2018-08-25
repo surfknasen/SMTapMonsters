@@ -82,12 +82,12 @@ public class PlayerAttack : MonoBehaviour {
 			{
 				hitsSinceLastUltimate = 0;
 				mouseDownTime = 0;
-				ShowUltimateAttackText();
+				if(!ultimateAttackText.gameObject.activeInHierarchy) ShowUltimateAttackText();
 				UltimateAttack();
 			}
 		} else if(hitsSinceLastUltimate > 20)
 		{
-			ShowUltimateAttackText();
+			if(!ultimateAttackText.gameObject.activeInHierarchy) ShowUltimateAttackText();
 		}
 
 		if(hitShakeDuration > 0) // if it's hit
@@ -152,6 +152,12 @@ public class PlayerAttack : MonoBehaviour {
 		if(ultimateAttackText.gameObject.activeInHierarchy) return;
 		ultimateAttackText.gameObject.SetActive(true);
 		ultimateAttackText.gameObject.GetComponent<Animation>().Play();
+	}
+
+	public void HideUltimateAttackText()
+	{
+		ultimateAttackText.gameObject.GetComponent<Animation>().Stop();
+		ultimateAttackText.gameObject.SetActive(false);
 	}
 
 	public void UltimateAttack()

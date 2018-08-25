@@ -182,8 +182,7 @@ public class BossFightHandler : MonoBehaviour {
 		GetComponent<BossAttack>().canAttack = true;
 		playerAttack.canAttack = true;
 		playerAttack.autoAttack = true;
-		playerAttack.ultimateAttackText.GetComponent<Animation>().Stop();
-		playerAttack.ultimateAttackText.gameObject.SetActive(false);
+		playerAttack.HideUltimateAttackText();
 		playerAttack.StartCoroutine(playerAttack.AutoAttack());
 	}
 }

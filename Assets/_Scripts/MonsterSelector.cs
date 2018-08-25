@@ -76,9 +76,11 @@ public class MonsterSelector : MonoBehaviour {
 
 	IEnumerator SpawnNewMonster(int index)
 	{
+		GameObject currentMonster = GameObject.FindGameObjectWithTag("MyMonster");
+		GetComponent<BossFightHandler>().SetHealthCanvas(currentMonster);
 		if(lastIndex == index) yield break;
 		// check if my monster is currently in an animation
-		GameObject currentMonster = GameObject.FindGameObjectWithTag("MyMonster");
+		
 		while(currentMonster.GetComponent<Animation>().isPlaying)
 		{
 			yield return new WaitForSeconds(0.05f);
