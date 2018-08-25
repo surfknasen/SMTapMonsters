@@ -9,12 +9,13 @@ public class Health : MonoBehaviour {
 	public Transform damageCanvas;
 	public Slider healthSlider;
 	public Text healthText;
+	public GameObject sparksParticle;
 
 	private float maxHealth; // set to -1 if this is a training golem
 	private bool isTrainingGolem;
 	private float currentHealth;
 	private GameObject gameManager;
-	private bool endedFight;
+	public bool endedFight;
 
 	void Start () 
 	{
@@ -73,6 +74,7 @@ public class Health : MonoBehaviour {
 		newDamageText.transform.SetParent(damageCanvas);
 		newDamageText.transform.localScale = new Vector3(1, 1, 1);
 		newDamageText.transform.position = transform.position + Random.insideUnitSphere * 1;
+		GameObject sparks = GameObject.Instantiate(sparksParticle, newDamageText.transform.position, transform.rotation);
 		newDamageText.GetComponent<Text>().text = "-" + dmg.ToString() + " HP";
 	}
 }

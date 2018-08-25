@@ -8,12 +8,14 @@ public class MonsterSelector : MonoBehaviour {
 	public GameObject[] cards;
 	public GameObject[] monsters;
 	public ScrollRectSnap scrollRectSnap;
+	public GameObject spawnParticle;
 
 	private LevelSystem levelSystem;
 	private PlayerAttack playerAttack;
 	private int[] unlockableLvl;
 	[SerializeField]
 	private Color lockedColor;
+	private int lastIndex;
 
 	void Start () 
 	{
@@ -24,9 +26,10 @@ public class MonsterSelector : MonoBehaviour {
 		unlockableLvl = new int[100];
 
 		UpdateCardStates();
+		StartCoroutine(SpawnNewMonster(PlayerPrefs.GetInt("MonsterIndex", 0)));
 	}
 
-	void UpdateCardStates()
+	public void UpdateCardStates()
 	{
 		for(int i = 0; i < cards.Length; i++)
 		{
@@ -62,6 +65,7 @@ public class MonsterSelector : MonoBehaviour {
 				{
 					// spawn that monster
 					StartCoroutine(SpawnNewMonster(i));
+					PlayerPrefs.SetInt("MonsterIndex", i);
 				} else
 				{
 					// display some message that you're not the right lvl
@@ -72,6 +76,7 @@ public class MonsterSelector : MonoBehaviour {
 
 	IEnumerator SpawnNewMonster(int index)
 	{
+		if(lastIndex == index) yield break;
 		// check if my monster is currently in an animation
 		GameObject currentMonster = GameObject.FindGameObjectWithTag("MyMonster");
 		while(currentMonster.GetComponent<Animation>().isPlaying)
@@ -81,9 +86,11 @@ public class MonsterSelector : MonoBehaviour {
 
 		Destroy(currentMonster.transform.parent.gameObject);
 		GameObject newMonster = GameObject.Instantiate(monsters[index]);
+		GameObject particle = GameObject.Instantiate(spawnParticle, newMonster.transform.GetChild(0).transform.position, transform.rotation);
 		newMonster = newMonster.transform.GetChild(0).gameObject;
 		playerAttack.SetMyMonsterVariables(newMonster);
 		GetComponent<BossFightHandler>().SetHealthCanvas(newMonster);
+		lastIndex = index;
 	}
 
 }

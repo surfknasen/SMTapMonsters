@@ -16,8 +16,30 @@ public class BossSelector : MonoBehaviour {
 	void Start () 
 	{
 		bossesBeaten = new bool[monsterCards.Length];
+		for(int i = 0; i < bossesBeaten.Length; i++)
+		{
+			if(i < PlayerPrefs.GetInt("BossesBeaten"))
+			{
+				bossesBeaten[i] = true;
+			} else
+			{
+				break;
+			}
+		}
 
 		UpdateCardStates();
+	}
+
+	public void SetPlayerPrefs()
+	{
+		for(int i = 0; i < bossesBeaten.Length; i++)
+		{
+			if(!bossesBeaten[i])
+			{
+				PlayerPrefs.SetInt("BossesBeaten", i);
+				break;
+			}
+		}
 	}
 
 	void UpdateCardStates()

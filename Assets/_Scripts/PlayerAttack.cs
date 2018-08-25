@@ -12,6 +12,7 @@ public class PlayerAttack : MonoBehaviour {
 	public float hitShakeAmount;
 	public float hitShakeSpeed;
 	public Vector3 myOriginalPos;
+	public AudioSource hitSound;
 
 	private GameObject myMonster;
 	private Animation myMonsterAnim;
@@ -120,15 +121,15 @@ public class PlayerAttack : MonoBehaviour {
 		if(myMonsterAnim == null) yield break;
 		StartCoroutine(AttackDelay());
 		yield return new WaitForSeconds(myMonsterAnim.clip.length * 0.2f);
-		
+		//PlayHitAudio();
 		myMonsterAnim.Stop();
 		myMonsterAnim.Play();
 		if(BossFightHandler.bossFightActive) hitsSinceLastUltimate++;
 		hitShakeDuration = .1f;
-		otherMonster.transform.GetChild(0).GetComponent<Health>().TakeDamage(Random.Range(myStats.atkMin, myStats.atkMax + 1) * GetComponent<LevelSystem>().currentLevel / 4);
+		otherMonster.transform.GetChild(0).GetComponent<Health>().TakeDamage(Random.Range(myStats.atkMin, myStats.atkMax + 1));
 
 		// for the future: add random misses. if the attack is successful
-		level.AddExp(Random.Range(myStats.atkMin, myStats.atkMax) * level.currentLevel * 3);
+		level.AddExp(Random.Range(myStats.atkMin, myStats.atkMax) * level.currentLevel * 2);
 	}
 
 	IEnumerator AttackDelay()
@@ -137,6 +138,13 @@ public class PlayerAttack : MonoBehaviour {
 		yield return new WaitForSeconds(myMonsterAnim.clip.length * 0.75f);
 		hitShakeAmount = 0.3f;
 		canAttack = true;
+	}
+
+	void PlayHitAudio()
+	{
+		hitSound.time = 0.5f;
+		hitSound.pitch = Random.Range(1f, 1.1f);
+		hitSound.Play();
 	}
 
 	void ShowUltimateAttackText()
@@ -153,7 +161,7 @@ public class PlayerAttack : MonoBehaviour {
 		hitsSinceLastUltimate = 0;
 		for(int i = 0; i < 10; i++)
 		{
-			otherMonster.transform.GetChild(0).GetComponent<Health>().TakeDamage(Random.Range(myStats.atkMin, myStats.atkMax + 1) * GetComponent<LevelSystem>().currentLevel / 4); // extra damage too
+			otherMonster.transform.GetChild(0).GetComponent<Health>().TakeDamage(Random.Range(myStats.atkMin, myStats.atkMax + 1)); // extra damage too
 		}
 		ultimateAttackText.gameObject.SetActive(false);
 	}

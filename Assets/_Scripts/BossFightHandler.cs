@@ -17,6 +17,7 @@ public class BossFightHandler : MonoBehaviour {
 	public List<GameObject> fightUIElementsToHide;
 	public ScrollRectSnap scrollRectSnap;
 	public GameObject winParticle;
+	public ParticleSystem loseParticle;
 
 	private GameObject trainingDummy;
 	private GameObject currentBoss;
@@ -29,22 +30,20 @@ public class BossFightHandler : MonoBehaviour {
 	{
 		trainingDummy = GameObject.FindGameObjectWithTag("OtherMonster");
 		playerHealth = GameObject.FindGameObjectWithTag("MyMonster").GetComponent<Health>();
-		SetHealthCanvas(GameObject.FindGameObjectWithTag("MyMonster"));
 		playerAttack = GetComponent<PlayerAttack>();
 		fishEye = Camera.main.gameObject.GetComponent<Fisheye>();
-		foreach(GameObject g in fightUIElementsToShow)
-		{
-			g.SetActive(false);
-		}
 	}
 	
 	public void SetHealthCanvas(GameObject newMonster)
 	{
+		GameObject keep = fightUIElementsToShow[0];
+		fightUIElementsToShow.Clear();
+		fightUIElementsToShow.Add(keep);
 		foreach(Transform t in newMonster.transform)
 		{
 			if(t.gameObject.name == "Canvas")
 			{
-				fightUIElementsToShow[0] = t.gameObject;
+				fightUIElementsToShow.Add(t.gameObject);
 				t.gameObject.SetActive(false);
 			}
 		}
@@ -133,6 +132,7 @@ public class BossFightHandler : MonoBehaviour {
 			GameObject particle = Instantiate(winParticle);
 			BossSelector bossSelector = GetComponent<BossSelector>();
 			bossSelector.bossesBeaten[bossIndex] = true;
+			bossSelector.SetPlayerPrefs();
 			bossSelector.CheckIfNewBossUnlocked();
 			yield return new WaitForSeconds(3);
 			Destroy(particle);
@@ -143,6 +143,7 @@ public class BossFightHandler : MonoBehaviour {
 		{
 			skullIcon.SetActive(true);
 			skullIcon.transform.GetChild(0).GetComponent<Animation>().Play();
+			loseParticle.Play();
 			yield return new WaitForSeconds(2f);
 		}
 
@@ -177,9 +178,11 @@ public class BossFightHandler : MonoBehaviour {
 
 		yield return new WaitForSeconds(0.55f); // since the scene switch animation is 1.1 sec, we finish that here before letting the player attack again
 		playerHealth.ResetScript(); // reset the health script
+		playerHealth.endedFight = false;
 		GetComponent<BossAttack>().canAttack = true;
 		playerAttack.canAttack = true;
 		playerAttack.autoAttack = true;
+		playerAttack.ultimateAttackText.GetComponent<Animation>().Stop();
 		playerAttack.ultimateAttackText.gameObject.SetActive(false);
 		playerAttack.StartCoroutine(playerAttack.AutoAttack());
 	}

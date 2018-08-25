@@ -116,6 +116,8 @@ MonoBehaviour:
   damageCanvas: {fileID: 0}
   healthSlider: {fileID: 0}
   healthText: {fileID: 0}
+  sparksParticle: {fileID: 1995403933065894, guid: 4961a16ba01e09547be3e1c9d16d5ad0,
+    type: 2}
 --- !u!114 &114763803770067032
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -143,6 +145,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
@@ -187,6 +190,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:

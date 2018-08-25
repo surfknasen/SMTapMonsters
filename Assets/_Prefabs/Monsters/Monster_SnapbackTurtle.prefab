@@ -293,6 +293,8 @@ MonoBehaviour:
   damageCanvas: {fileID: 0}
   healthSlider: {fileID: 114078234600726592}
   healthText: {fileID: 114709340846098876}
+  sparksParticle: {fileID: 1995403933065894, guid: 4961a16ba01e09547be3e1c9d16d5ad0,
+    type: 2}
 --- !u!114 &114418889476376984
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -268,8 +268,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   atkMin: 200
-  atkMax: 400
-  hp: 10000
+  atkMax: 100
+  hp: 4000
 --- !u!114 &114129341058729852
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -299,6 +299,9 @@ MonoBehaviour:
   damageCanvas: {fileID: 0}
   healthSlider: {fileID: 114734369702374292}
   healthText: {fileID: 114918930176496202}
+  sparksParticle: {fileID: 1995403933065894, guid: 4961a16ba01e09547be3e1c9d16d5ad0,
+    type: 2}
+  endedFight: 0
 --- !u!114 &114354775214411958
 MonoBehaviour:
   m_ObjectHideFlags: 1
