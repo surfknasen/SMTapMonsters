@@ -10,17 +10,20 @@ public class Health : MonoBehaviour {
 	public Slider healthSlider;
 	public Text healthText;
 	public GameObject sparksParticle;
+	public Color cor;
 
 	private float maxHealth; // set to -1 if this is a training golem
 	private bool isTrainingGolem;
 	private float currentHealth;
 	private GameObject gameManager;
 	public bool endedFight;
+	private SpriteRenderer spriteRend;
 
 	void Start () 
 	{
 		gameManager = GameObject.FindGameObjectWithTag("GameManager");
 		maxHealth = GetComponent<MonsterStats>().hp;
+		spriteRend = GetComponent<SpriteRenderer>();
 		currentHealth = maxHealth;
 		damageCanvas = GameObject.FindGameObjectWithTag("DamageCanvas").transform;
 		if(healthText != null) healthText.text = "HP: " + currentHealth;
@@ -59,6 +62,7 @@ public class Health : MonoBehaviour {
 
 	public void TakeDamage(float dmg)
 	{
+		StartCoroutine(TintRed());
 		if(!isTrainingGolem)
 		{
 			currentHealth -= dmg;
@@ -66,6 +70,29 @@ public class Health : MonoBehaviour {
 			if(healthText != null) healthText.text = "HP: " + currentHealth;
 		}
 		CreateDamageText(dmg);
+	}
+
+	IEnumerator TintRed()
+	{
+		spriteRend.color = Color.white;
+		float duration = 0.05f;
+		float elapsedTime = 0f;
+
+		while(elapsedTime < duration)
+		{
+			spriteRend.color = Color.Lerp(spriteRend.color, new Color32(255, 110, 110, 255), elapsedTime / duration);
+			elapsedTime += Time.deltaTime;
+			yield return new WaitForEndOfFrame();
+		}
+
+		elapsedTime = 0f;
+		while(elapsedTime < duration)
+		{
+			spriteRend.color = Color.Lerp(spriteRend.color, Color.white, elapsedTime / duration);
+			elapsedTime += Time.deltaTime;
+			yield return new WaitForEndOfFrame();
+		}
+		spriteRend.color = Color.white;
 	}
 
 	void CreateDamageText(float dmg)

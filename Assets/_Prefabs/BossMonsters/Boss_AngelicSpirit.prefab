@@ -301,6 +301,7 @@ MonoBehaviour:
   healthText: {fileID: 114918930176496202}
   sparksParticle: {fileID: 1995403933065894, guid: 4961a16ba01e09547be3e1c9d16d5ad0,
     type: 2}
+  cor: {r: 0, g: 0, b: 0, a: 0}
   endedFight: 0
 --- !u!114 &114354775214411958
 MonoBehaviour:

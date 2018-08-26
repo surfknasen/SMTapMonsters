@@ -64,6 +64,7 @@ public class BossSelector : MonoBehaviour {
 
 	public void OnFightBossButtonPress()
 	{
+		print("buttonPressed" + scrollRectSnap.cardToSnapTo.gameObject);
 		for(int i = 0; i < monsterCards.Length; i++)
 		{
 			if(scrollRectSnap.cardToSnapTo.gameObject == monsterCards[0])

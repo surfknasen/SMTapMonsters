@@ -273,6 +273,7 @@ MonoBehaviour:
   healthText: {fileID: 114340828641509840}
   sparksParticle: {fileID: 1995403933065894, guid: 4961a16ba01e09547be3e1c9d16d5ad0,
     type: 2}
+  cor: {r: 0, g: 0, b: 0, a: 0}
   endedFight: 0
 --- !u!114 &114075315193364142
 MonoBehaviour:
@@ -299,9 +300,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ef658b6cd82b4e40bd350e4f2578285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  atkMin: 1000
-  atkMax: 1500
-  hp: 50000
+  atkMin: 200
+  atkMax: 300
+  hp: 10000
 --- !u!114 &114173346710794934
 MonoBehaviour:
   m_ObjectHideFlags: 1
