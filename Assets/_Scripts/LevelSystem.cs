@@ -49,7 +49,7 @@ public class LevelSystem : MonoBehaviour {
 	void LevelUp(float spareExp)
 	{
 		//nextLevelExp = 20 * (int)Mathf.Pow(2, currentLevel - 1);
-		nextLevelExp = 100 * currentLevel * (currentLevel + 2) / 2;
+		nextLevelExp = 200 * currentLevel * (currentLevel + 3) / 2;
 		currentLevel++;
 		currentExp = 0;
 		PlayerPrefs.SetInt("Level", currentLevel);

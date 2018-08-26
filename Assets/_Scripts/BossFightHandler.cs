@@ -18,6 +18,7 @@ public class BossFightHandler : MonoBehaviour {
 	public ScrollRectSnap scrollRectSnap;
 	public GameObject winParticle;
 	public ParticleSystem loseParticle;
+	public GameObject fightCanvas;
 
 	private GameObject trainingDummy;
 	private GameObject currentBoss;
@@ -59,6 +60,7 @@ public class BossFightHandler : MonoBehaviour {
 		playerAttack.StopAllCoroutines();
 		playerAttack.canAttack = false; 
 		playerAttack.autoAttack = false;
+		GameObject.FindGameObjectWithTag("MyMonster").GetComponent<Health>().ResetScript();
 
 		sceneSwitch.Play();
  		yield return new WaitForSeconds(0.55f); // delay while the animation is taking place. the animation is 2 seconds. this is half of that time
@@ -66,7 +68,7 @@ public class BossFightHandler : MonoBehaviour {
 
 		playerAttack.canAttack = true; 
 		
-
+		fightCanvas.SetActive(true);
 		// ** FIX UP THE MENU (REMOVE THE BOTTOM MENU) ** //
 		foreach(GameObject g in fightUIElementsToShow)
 		{
@@ -177,8 +179,8 @@ public class BossFightHandler : MonoBehaviour {
 		otherMonster.transform.parent.position = new Vector3(0, ogPos.y, 0);
 
 		yield return new WaitForSeconds(0.55f); // since the scene switch animation is 1.1 sec, we finish that here before letting the player attack again
-		playerHealth.ResetScript(); // reset the health script
-		playerHealth.endedFight = false;
+		GameObject.FindGameObjectWithTag("MyMonster").GetComponent<Health>().endedFight = false;
+		GameObject.FindGameObjectWithTag("MyMonster").GetComponent<Health>().ResetScript(); // reset the health script
 		GetComponent<BossAttack>().canAttack = true;
 		playerAttack.canAttack = true;
 		playerAttack.autoAttack = true;

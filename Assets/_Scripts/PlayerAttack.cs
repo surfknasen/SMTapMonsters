@@ -8,6 +8,7 @@ public class PlayerAttack : MonoBehaviour {
 
 	public bool canAttack, autoAttack;
 	public Text ultimateAttackText;
+	public GameObject fightCanvas;
 
 	public float hitShakeAmount;
 	public float hitShakeSpeed;
@@ -129,7 +130,7 @@ public class PlayerAttack : MonoBehaviour {
 		otherMonster.transform.GetChild(0).GetComponent<Health>().TakeDamage(Random.Range(myStats.atkMin, myStats.atkMax + 1));
 
 		// for the future: add random misses. if the attack is successful
-		level.AddExp(Random.Range(myStats.atkMin, myStats.atkMax) * level.currentLevel * 2);
+		level.AddExp(Random.Range(myStats.atkMin, myStats.atkMax) * level.currentLevel * 4);
 	}
 
 	IEnumerator AttackDelay()
@@ -150,6 +151,7 @@ public class PlayerAttack : MonoBehaviour {
 	void ShowUltimateAttackText()
 	{
 		if(ultimateAttackText.gameObject.activeInHierarchy) return;
+		fightCanvas.SetActive(true);
 		ultimateAttackText.gameObject.SetActive(true);
 		ultimateAttackText.gameObject.GetComponent<Animation>().Play();
 	}
@@ -158,6 +160,7 @@ public class PlayerAttack : MonoBehaviour {
 	{
 		ultimateAttackText.gameObject.GetComponent<Animation>().Stop();
 		ultimateAttackText.gameObject.SetActive(false);
+		fightCanvas.SetActive(false);
 	}
 
 	public void UltimateAttack()
