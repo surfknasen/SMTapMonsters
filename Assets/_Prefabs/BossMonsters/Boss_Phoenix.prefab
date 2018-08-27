@@ -302,7 +302,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   atkMin: 200
   atkMax: 300
-  hp: 10000
+  hp: 500000
 --- !u!114 &114173346710794934
 MonoBehaviour:
   m_ObjectHideFlags: 1

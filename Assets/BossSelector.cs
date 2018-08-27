@@ -48,11 +48,15 @@ public class BossSelector : MonoBehaviour {
 		{
 			if(bossesBeaten[i-1])
 			{
-				monsterCards[i].GetComponent<Image>().color = Color.white;
+				Image image = monsterCards[i].GetComponent<Image>();
+				if(image != null) image.color = Color.white;
+				else monsterCards[i].transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.white;
 			} 
 			else
 			{
-				monsterCards[i].GetComponent<Image>().color = lockedColor;
+				Image image = monsterCards[i].GetComponent<Image>();
+				if(image != null) image.color = lockedColor;
+				else monsterCards[i].transform.GetChild(0).gameObject.GetComponent<Image>().color = lockedColor;
 			} 
 		}
 	}
@@ -64,7 +68,6 @@ public class BossSelector : MonoBehaviour {
 
 	public void OnFightBossButtonPress()
 	{
-		print("buttonPressed" + scrollRectSnap.cardToSnapTo.gameObject);
 		for(int i = 0; i < monsterCards.Length; i++)
 		{
 			if(scrollRectSnap.cardToSnapTo.gameObject == monsterCards[0])

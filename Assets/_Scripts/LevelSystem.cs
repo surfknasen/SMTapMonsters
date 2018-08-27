@@ -20,7 +20,7 @@ public class LevelSystem : MonoBehaviour {
 		currentLevel = PlayerPrefs.GetInt("Level");
 		currentExp = PlayerPrefs.GetInt("CurrentExp");
 		lvlText.text = "LVL " + currentLevel;
-		nextLevelExp = 100 * currentLevel * (currentLevel + 2) / 2;
+		nextLevelExp = 20 * currentLevel * (currentLevel + 1) / 2;
 		expText.text = currentExp + " / " + nextLevelExp;
 		selector = GetComponent<MonsterSelector>();
 		//selector.UpdateCardStates();
@@ -34,7 +34,6 @@ public class LevelSystem : MonoBehaviour {
 
 	public void AddExp(int amount)
 	{
-		print(amount);
 		currentExp += amount;
 		lvlText.text = "LVL " + currentLevel;
 		expText.text = currentExp + " / " + nextLevelExp;
@@ -49,7 +48,7 @@ public class LevelSystem : MonoBehaviour {
 	void LevelUp(float spareExp)
 	{
 		//nextLevelExp = 20 * (int)Mathf.Pow(2, currentLevel - 1);
-		nextLevelExp = 200 * currentLevel * (currentLevel + 3) / 2;
+		nextLevelExp = 20 * currentLevel * (currentLevel + 1) / 2;
 		currentLevel++;
 		currentExp = 0;
 		PlayerPrefs.SetInt("Level", currentLevel);
