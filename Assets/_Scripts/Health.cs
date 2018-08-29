@@ -12,7 +12,7 @@ public class Health : MonoBehaviour {
 	public GameObject sparksParticle;
 	public Color cor;
 
-	private float maxHealth; // set to -1 if this is a training golem
+	public float maxHealth; // set to -1 if this is a training golem
 	private bool isTrainingGolem;
 	private float currentHealth;
 	private GameObject gameManager;

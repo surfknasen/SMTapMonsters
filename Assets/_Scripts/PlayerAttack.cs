@@ -51,11 +51,14 @@ public class PlayerAttack : MonoBehaviour {
 			myMonster = GameObject.FindGameObjectWithTag("MyMonster");
 			myMonsterAnim = myMonster.GetComponent<Animation>();
 			myStats = myMonster.GetComponent<MonsterStats>();
+			myStats.hp += myStats.hp * 1.5f;
 		} else
 		{
 			myMonster = monster;
 			myMonsterAnim = myMonster.GetComponent<Animation>();
 			myStats = myMonster.GetComponent<MonsterStats>();
+			myStats.hp += myStats.hp * 1.5f;
+		//	monster.GetComponent<Health>().maxHealth += monster.GetComponent<Health>().maxHealth * 0.5f;
 		}
 		
 	}
@@ -130,7 +133,7 @@ public class PlayerAttack : MonoBehaviour {
 		otherMonster.transform.GetChild(0).GetComponent<Health>().TakeDamage(Random.Range(myStats.atkMin, myStats.atkMax + 1) * level.currentLevel);
 
 		// for the future: add random misses. if the attack is successful
-		level.AddExp(Random.Range(myStats.atkMin, myStats.atkMax) * 20);
+		level.AddExp(Random.Range(myStats.atkMin, myStats.atkMax) * 15);
 	}
 
 	IEnumerator AttackDelay()

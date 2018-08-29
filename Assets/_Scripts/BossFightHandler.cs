@@ -19,6 +19,8 @@ public class BossFightHandler : MonoBehaviour {
 	public GameObject winParticle;
 	public ParticleSystem loseParticle;
 	public GameObject fightCanvas;
+	public Animation[] winAnimations;
+	public GameObject victoryScreen;
 
 	private GameObject trainingDummy;
 	private GameObject currentBoss;
@@ -29,6 +31,7 @@ public class BossFightHandler : MonoBehaviour {
 
 	void Start () 
 	{
+		if(PlayerPrefs.GetInt("BeatGame") == 1) BeatGame();
 		trainingDummy = GameObject.FindGameObjectWithTag("OtherMonster");
 		playerHealth = GameObject.FindGameObjectWithTag("MyMonster").GetComponent<Health>();
 		playerAttack = GetComponent<PlayerAttack>();
@@ -139,7 +142,13 @@ public class BossFightHandler : MonoBehaviour {
 			yield return new WaitForSeconds(3);
 			Destroy(particle);
 			winExpText.SetActive(false);
-			// give exp and stuff
+
+			if(bossIndex == 8) // if it's the last boss
+			{
+				PlayerPrefs.SetInt("BeatGame", 1);
+				BeatGame();
+				yield break;
+			}
 		} 
 		else
 		{
@@ -186,5 +195,16 @@ public class BossFightHandler : MonoBehaviour {
 		playerAttack.autoAttack = true;
 		playerAttack.HideUltimateAttackText();
 		playerAttack.StartCoroutine(playerAttack.AutoAttack());
+	}
+
+	void BeatGame()
+	{
+		victoryScreen.SetActive(true);
+		// win screen and credits or some stuff
+		foreach(Animation anim in winAnimations)
+		{
+			anim.Play();
+		}
+		Destroy(gameObject);
 	}
 }
