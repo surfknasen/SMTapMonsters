@@ -31,6 +31,7 @@ public class PlayerAttack : MonoBehaviour {
 
 	void Start () 
 	{
+		Application.targetFrameRate = 60;
 		SetMyMonsterVariables(null);
 
 		otherMonster = GameObject.FindGameObjectWithTag("OtherMonster").transform.parent;

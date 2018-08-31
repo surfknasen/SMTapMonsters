@@ -84,6 +84,6 @@ public class LevelSystem : MonoBehaviour {
 
 	void UpdateSlider(float newValue)
 	{
-		expSlider.value = Mathf.Lerp(expSlider.value, newValue, Time.deltaTime * 5);
+		expSlider.value = Mathf.MoveTowards(expSlider.value, newValue, Time.deltaTime );
 	}
 }
